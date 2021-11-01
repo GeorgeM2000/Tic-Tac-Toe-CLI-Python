@@ -145,6 +145,7 @@ def MINIMAX(state):
         MAX_VALUE(state,player,globalMINLevel,globalMAXLevel+1)
         action = ACTIONS(state)
         newState = RESULT(state,action[maxArray.index(max(maxArray))],globalPlayer)
+
         PRINT_STATE(newState)
         EMPTY_ARRAY(maxArray)
         return newState
@@ -152,6 +153,7 @@ def MINIMAX(state):
         MIN_VALUE(state,player,globalMINLevel+1,globalMAXLevel)
         action = ACTIONS(state)
         newState = RESULT(state,action[minArray.index(min(minArray))],globalPlayer)
+
         PRINT_STATE(newState)
         EMPTY_ARRAY(minArray)
         return newState
