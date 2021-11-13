@@ -14,7 +14,7 @@ class Tictactoe:
         self.x_top_level = 0
         self.o_top_level = 0
 
-        self.player = None
+        self.player = 0
 
 
     # Print the current state
@@ -108,7 +108,7 @@ class Tictactoe:
 
 
     # Returns a new state afrer a certain action is taken
-    def RESULT(self, state,action,player):
+    def RESULT(self, state, action, player):
         newState = [["0" for i in range(3)] for j in range(3)] 
         for i in range(3):
             for j in range(3):
@@ -122,51 +122,49 @@ class Tictactoe:
         return newState
 
     # MAX_VALUE
-    def MAX_VALUE(self, state, player, o_top_level, x_top_level):
-        if self.TERMINAL(state) == True:
+    def MAX_VALUE(self, state, o_top_level, x_top_level):
+        if self.TERMINAL(state):
             return self.UTILITY(state)
 
         v = -10000
         for action in self.ACTIONS(state):
-            res = self.MIN_VALUE(self.RESULT(state, action, 1), -1, o_top_level+1, x_top_level)
+            res = self.MIN_VALUE(self.RESULT(state, action, 1), o_top_level+1, x_top_level)
             v = max(v, res)
             if self.player == 1 and x_top_level == 1:
-                self.max_array.append(v)
+                self.max_array.append(res)
         return v
 
     # MIN_VALUE
-    def MIN_VALUE(self, state, player, o_top_level, x_top_level):
-        if self.TERMINAL(state) == True:
+    def MIN_VALUE(self, state, o_top_level, x_top_level):
+        if self.TERMINAL(state):
             return self.UTILITY(state)
 
         v = 10000
         for action in self.ACTIONS(state):
-            res = self.MAX_VALUE(self.RESULT(state,action,-1) , 1, o_top_level, x_top_level+1)
+            res = self.MAX_VALUE(self.RESULT(state, action, -1) , o_top_level, x_top_level+1)
             v = min(v, res)
             if self.player == -1 and o_top_level == 1:
-                self.min_array.append(v)
+                self.min_array.append(res)
         return v
 
     # MINIMAX
     def MINIMAX(self,state, player):
         if player == 1:
-            self.MAX_VALUE(state, player, self.o_top_level, self.x_top_level+1)
+            self.player = 1
+            self.MAX_VALUE(state, self.o_top_level, self.x_top_level+1)
             action = self.ACTIONS(state)
             newState = self.RESULT(state, action[self.max_array.index(max(self.max_array))],1)
-            self.player = 1
-
-            print(self.max_array)
+            
 
             self.PRINT_STATE(newState)
             self.EMPTY_ARRAY(self.max_array)
             return newState
         else:
-            self.MIN_VALUE(state, player, self.o_top_level+1, self.x_top_level)
+            self.player = -1
+            self.MIN_VALUE(state, self.o_top_level+1, self.x_top_level)
             action = self.ACTIONS(state)
             newState = self.RESULT(state,action[self.min_array.index(min(self.min_array))],-1)
-            self.player = -1
-
-            print(self.min_array)
+            
 
             self.PRINT_STATE(newState)
             self.EMPTY_ARRAY(self.min_array)
@@ -174,10 +172,13 @@ class Tictactoe:
 
 
 if __name__ == "__main__":
-    state = [        
-        ["Χ","Χ","Ο"],
-        ["Ο","Ο","0"],
-        ["Χ","0","0"]
+
+    state = [  
+
+        ["0","0","0"],
+        ["0","0","0"],
+        ["0","0","0"]
+
             ]
 
     Tictactoe_Solver = Tictactoe()
@@ -194,9 +195,18 @@ if __name__ == "__main__":
     Xcoord = None
     Ycoord = None
     while True:
+
         # If the TERMINAL function return 1, break the loop
         if Tictactoe_Solver.TERMINAL(state):
+            winner = Tictactoe_Solver.UTILITY(state)
+            if winner == 1:
+                print("X Wins!")
+            elif winner == -1:
+                print("O Wins!")
+            else:
+                print("Tie!")
             break
+        
         if Tictactoe_Solver.PLAYER(state) == 1:
             # If the user chooses the X symbol execute this block of code
             if HUMAN == "X":
