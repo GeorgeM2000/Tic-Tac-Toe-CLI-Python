@@ -14,9 +14,6 @@ class Tictactoe:
         self.x_top_level = 0
         self.o_top_level = 0
 
-        self.player = 0
-
-
     # Print the current state
     def PRINT_STATE(self, state):
         for i in range(3):
@@ -130,7 +127,7 @@ class Tictactoe:
         for action in self.ACTIONS(state):
             res = self.MIN_VALUE(self.RESULT(state, action, 1), o_top_level+1, x_top_level)
             v = max(v, res)
-            if self.player == 1 and x_top_level == 1:
+            if x_top_level == 1:
                 self.max_array.append(res)
         return v
 
@@ -143,7 +140,7 @@ class Tictactoe:
         for action in self.ACTIONS(state):
             res = self.MAX_VALUE(self.RESULT(state, action, -1) , o_top_level, x_top_level+1)
             v = min(v, res)
-            if self.player == -1 and o_top_level == 1:
+            if o_top_level == 1:
                 self.min_array.append(res)
         return v
 
@@ -175,9 +172,9 @@ if __name__ == "__main__":
 
     state = [  
 
-        ["X","X","O"],
-        ["O","O","0"],
-        ["X","0","0"]
+        ["0","0","0"],
+        ["0","0","0"],
+        ["0","0","0"]
 
             ]
 
